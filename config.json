@@ -1,0 +1,14 @@
+{
+  "info": {
+    "name": "Spoilar",
+    "authors": [{
+      "name": "Alex'Presso",
+      "discord_id": "168436075058954240",
+      "github_username": "AlexPresso"
+    }],
+    "version": "1.0",
+    "description": "A plugin used to put all medias sent by some Discord users under spoiler tags.",
+    "github": ""
+  },
+  "main": "index.js"
+}
