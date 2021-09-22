@@ -1,11 +1,7 @@
 /**
  * @name Spoilar
- * @invite undefined
- * @authorLink undefined
- * @donate undefined
- * @patreon undefined
- * @website 
- * @source undefined
+ * @website https://github.com/AlexPresso/Spoilar-bd-plugin
+ * @source https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js
  */
 /*@cc_on
 @if (@_jscript)
@@ -32,7 +28,7 @@
 @else@*/
 
 module.exports = (() => {
-    const config = {"info":{"name":"Spoilar","authors":[{"name":"Alex'Presso","discord_id":"168436075058954240","github_username":"AlexPresso"}],"version":"1.0","description":"A plugin used to put all medias sent by some Discord users under spoiler tags.","github":""},"main":"index.js"};
+    const config = {"info":{"name":"Spoilar","authors":[{"name":"Alex'Presso","discord_id":"168436075058954240","github_username":"AlexPresso"}],"version":"1.0","description":"A plugin used to put all medias sent by some Discord users under spoiler tags.","github":"https://github.com/AlexPresso/Spoilar-bd-plugin","github_raw":"https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"},"main":"index.js"};
 
     return !global.ZeresPluginLibrary ? class {
         constructor() {this._config = config;}
