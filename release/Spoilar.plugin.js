@@ -1,5 +1,6 @@
 /**
  * @name Spoilar
+ * @authorLink https://github.com/AlexPresso
  * @website https://github.com/AlexPresso/Spoilar-bd-plugin
  * @source https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js
  */
