@@ -35,7 +35,6 @@ module.exports = (Plugin, Library) => {
 
         _dispatchMiddleware(args) {
             const { type } = args[0];
-            console.log(args);
             switch(type) {
                 case 'MESSAGE_CREATE':
                     this._tryApplySpoiler(args[0].message);
