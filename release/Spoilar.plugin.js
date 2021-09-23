@@ -1,6 +1,6 @@
 /**
  * @name Spoilar
- * @authorLink https://github.com/AlexPresso
+ * @authorLink https://alexpresso.me
  * @website https://github.com/AlexPresso/Spoilar-bd-plugin
  * @source https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js
  */
@@ -29,7 +29,7 @@
 @else@*/
 
 module.exports = (() => {
-    const config = {"info":{"name":"Spoilar","authors":[{"name":"Alex'Presso","discord_id":"168436075058954240","github_username":"AlexPresso"}],"version":"1.0","description":"A plugin used to put all medias sent by some Discord users under spoiler tags.","github":"https://github.com/AlexPresso/Spoilar-bd-plugin","github_raw":"https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"},"main":"index.js"};
+    const config = {"info":{"name":"Spoilar","authors":[{"name":"Alex'Presso","discord_id":"168436075058954240","github_username":"AlexPresso"}],"version":"1.1","description":"A plugin used to put all medias sent by some Discord users under spoiler tags.","github":"https://github.com/AlexPresso/Spoilar-bd-plugin","github_raw":"https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"},"main":"index.js"};
 
     return !global.ZeresPluginLibrary ? class {
         constructor() {this._config = config;}
@@ -89,7 +89,6 @@ module.exports = (() => {
 
         _dispatchMiddleware(args) {
             const { type } = args[0];
-            console.log(args);
             switch(type) {
                 case 'MESSAGE_CREATE':
                     this._tryApplySpoiler(args[0].message);

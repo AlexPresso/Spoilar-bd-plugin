@@ -6,7 +6,7 @@
       "discord_id": "168436075058954240",
       "github_username": "AlexPresso"
     }],
-    "version": "1.0",
+    "version": "1.1",
     "description": "A plugin used to put all medias sent by some Discord users under spoiler tags.",
     "github": "https://github.com/AlexPresso/Spoilar-bd-plugin",
     "github_raw": "https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"
