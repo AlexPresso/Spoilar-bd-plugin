@@ -37,13 +37,12 @@ module.exports = (Plugin, Library) => {
             const { type } = args[0];
             switch(type) {
                 case 'MESSAGE_CREATE':
+                case 'MESSAGE_UPDATE':
                     this._tryApplySpoiler(args[0].message);
                     break;
                 case 'LOAD_MESSAGES_SUCCESS':
                     args[0].messages.forEach(m => this._tryApplySpoiler(m));
                     break;
-                case 'MESSAGE_UPDATE':
-                    this._tryApplySpoiler(args[0].message);
             }
         }
 
