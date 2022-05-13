@@ -6,10 +6,13 @@
       "discord_id": "168436075058954240",
       "github_username": "AlexPresso"
     }],
-    "version": "1.1",
+    "version": "1.2",
     "description": "A plugin used to put all medias sent by some Discord users under spoiler tags.",
     "github": "https://github.com/AlexPresso/Spoilar-bd-plugin",
-    "github_raw": "https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"
+    "github_raw": "https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"
   },
+  "changelog": [
+    {"title": "v1.2 Improvements", "items": ["Add embed spoil option", "Add message content spoil option", "Add attachment spoil option"]}
+  ],
   "main": "index.js"
 }

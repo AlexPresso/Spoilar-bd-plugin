@@ -5,7 +5,10 @@ module.exports = (Plugin, Library) => {
         constructor() {
             super();
             this.defaultSettings = {
-                toSpoilIds: ""
+                toSpoilIds: "",
+                spoilAttachments: true,
+                spoilEmbeds: true,
+                spoilMessageContent: false
             };
         }
 
@@ -29,6 +32,24 @@ module.exports = (Plugin, Library) => {
                     this.settings.toSpoilIds,
                     v => { this.settings.toSpoilIds = v },
                     { placeholder: "168436075058954240,168436075058954241" }
+                ),
+                new Settings.Switch(
+                    "Spoil Attachments",
+                    "",
+                    this.settings.spoilAttachments,
+                    v => { this.settings.spoilAttachments = v }
+                ),
+                new Settings.Switch(
+                    "Spoil Embeds",
+                    "",
+                    this.settings.spoilEmbeds,
+                    v => { this.settings.spoilEmbeds = v }
+                ),
+                new Settings.Switch(
+                    "Spoil Message Content",
+                    "",
+                    this.settings.spoilMessageContent,
+                    v => { this.settings.spoilMessageContent = v }
                 )
             )
         }
@@ -47,14 +68,15 @@ module.exports = (Plugin, Library) => {
         }
 
         _tryApplySpoiler(message) {
-            if(!this.settings.toSpoilIds.includes(message.author.id) || (!message.attachments.length && !message.embeds.length))
+            if(!this.settings.toSpoilIds.includes(message.author.id))
                 return;
 
-            if(message.attachments.length) {
+            if(this.settings.spoilAttachments && message.attachments.length)
                 message.attachments.forEach(att => { att.filename = `SPOILER_${att.filename}` });
-            } else {
-                message.embeds = message.embeds.filter(e => e.type !== 'image');
-            }
+            if(this.settings.spoilEmbeds)
+                message.embeds = [];
+            if(this.settings.spoilMessageContent)
+                message.content = `|${message.content}|`;
         }
     }
 }
