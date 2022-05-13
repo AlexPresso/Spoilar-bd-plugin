@@ -1,8 +1,11 @@
 /**
  * @name Spoilar
- * @authorLink https://alexpresso.me
+ * @invite undefined
+ * @authorLink undefined
+ * @donate undefined
+ * @patreon undefined
  * @website https://github.com/AlexPresso/Spoilar-bd-plugin
- * @source https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js
+ * @source https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js
  */
 /*@cc_on
 @if (@_jscript)
@@ -29,7 +32,7 @@
 @else@*/
 
 module.exports = (() => {
-    const config = {"info":{"name":"Spoilar","authors":[{"name":"Alex'Presso","discord_id":"168436075058954240","github_username":"AlexPresso"}],"version":"1.1","description":"A plugin used to put all medias sent by some Discord users under spoiler tags.","github":"https://github.com/AlexPresso/Spoilar-bd-plugin","github_raw":"https://github.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"},"main":"index.js"};
+    const config = {"info":{"name":"Spoilar","authors":[{"name":"Alex'Presso","discord_id":"168436075058954240","github_username":"AlexPresso"}],"version":"1.2","description":"A plugin used to put all medias sent by some Discord users under spoiler tags.","github":"https://github.com/AlexPresso/Spoilar-bd-plugin","github_raw":"https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"},"changelog":[{"title":"v1.2 Improvements","items":["Add embed spoil option","Add message content spoil option","Add attachment spoil option"]}],"main":"index.js"};
 
     return !global.ZeresPluginLibrary ? class {
         constructor() {this._config = config;}
@@ -59,7 +62,10 @@ module.exports = (() => {
         constructor() {
             super();
             this.defaultSettings = {
-                toSpoilIds: ""
+                toSpoilIds: "",
+                spoilAttachments: true,
+                spoilEmbeds: true,
+                spoilMessageContent: false
             };
         }
 
@@ -83,6 +89,24 @@ module.exports = (() => {
                     this.settings.toSpoilIds,
                     v => { this.settings.toSpoilIds = v },
                     { placeholder: "168436075058954240,168436075058954241" }
+                ),
+                new Settings.Switch(
+                    "Spoil Attachments",
+                    "",
+                    this.settings.spoilAttachments,
+                    v => { this.settings.spoilAttachments = v }
+                ),
+                new Settings.Switch(
+                    "Spoil Embeds",
+                    "",
+                    this.settings.spoilEmbeds,
+                    v => { this.settings.spoilEmbeds = v }
+                ),
+                new Settings.Switch(
+                    "Spoil Message Content",
+                    "",
+                    this.settings.spoilMessageContent,
+                    v => { this.settings.spoilMessageContent = v }
                 )
             )
         }
@@ -91,25 +115,25 @@ module.exports = (() => {
             const { type } = args[0];
             switch(type) {
                 case 'MESSAGE_CREATE':
+                case 'MESSAGE_UPDATE':
                     this._tryApplySpoiler(args[0].message);
                     break;
                 case 'LOAD_MESSAGES_SUCCESS':
                     args[0].messages.forEach(m => this._tryApplySpoiler(m));
                     break;
-                case 'MESSAGE_UPDATE':
-                    this._tryApplySpoiler(args[0].message);
             }
         }
 
         _tryApplySpoiler(message) {
-            if(!this.settings.toSpoilIds.includes(message.author.id) || (!message.attachments.length && !message.embeds.length))
+            if(!this.settings.toSpoilIds.includes(message.author.id))
                 return;
 
-            if(message.attachments.length) {
+            if(this.settings.spoilAttachments && message.attachments.length)
                 message.attachments.forEach(att => { att.filename = `SPOILER_${att.filename}` });
-            } else {
-                message.embeds = message.embeds.filter(e => e.type !== 'image');
-            }
+            if(this.settings.spoilEmbeds)
+                message.embeds = [];
+            if(this.settings.spoilMessageContent)
+                message.content = `|${message.content}|`;
         }
     }
 };
