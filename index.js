@@ -14,7 +14,7 @@ module.exports = (Plugin, Library) => {
 
         onStart() {
             Patcher.before(DiscordModules.Dispatcher, 'dispatch', (o, args, _) => {this._dispatchMiddleware(args)});
-            Patcher.before(DiscordModules.MessageStore._dispatcher, 'dispatch', (o, args, _) => {this._dispatchMiddleware(args)});
+            Patcher.before(DiscordModules.MessageStore._dispatcher, 'dispatch', (o, args, _) => {this._messageStoreMiddleware(args)});
             Logger.log("Started.");
         }
 
@@ -61,10 +61,14 @@ module.exports = (Plugin, Library) => {
                 case 'MESSAGE_UPDATE':
                     this._tryApplySpoiler(args[0].message);
                     break;
-                case 'LOAD_MESSAGES_SUCCESS':
-                    args[0].messages.forEach(m => this._tryApplySpoiler(m));
-                    break;
             }
+        }
+        _messageStoreMiddleware(args) {
+            const { type } = args[0];
+            if(type !== 'LOAD_MESSAGES_SUCCESS')
+                return;
+
+            args[0].messages.forEach(m => this._tryApplySpoiler(m));
         }
 
         _tryApplySpoiler(message) {
@@ -75,8 +79,8 @@ module.exports = (Plugin, Library) => {
                 message.attachments.forEach(att => { att.filename = `SPOILER_${att.filename}` });
             if(this.settings.spoilEmbeds)
                 message.embeds = [];
-            if(this.settings.spoilMessageContent)
-                message.content = `|${message.content}|`;
+            if(this.settings.spoilMessageContent && message.content && !(message.content.startsWith("||") && message.content.endsWith("||")))
+                message.content = `||${message.content}||`;
         }
     }
 }

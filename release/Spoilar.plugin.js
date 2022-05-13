@@ -32,7 +32,7 @@
 @else@*/
 
 module.exports = (() => {
-    const config = {"info":{"name":"Spoilar","authors":[{"name":"Alex'Presso","discord_id":"168436075058954240","github_username":"AlexPresso"}],"version":"1.2","description":"A plugin used to put all medias sent by some Discord users under spoiler tags.","github":"https://github.com/AlexPresso/Spoilar-bd-plugin","github_raw":"https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"},"changelog":[{"title":"v1.2 Improvements","items":["Add embed spoil option","Add message content spoil option","Add attachment spoil option"]}],"main":"index.js"};
+    const config = {"info":{"name":"Spoilar","authors":[{"name":"Alex'Presso","discord_id":"168436075058954240","github_username":"AlexPresso"}],"version":"1.3","description":"A plugin used to put all medias sent by some Discord users under spoiler tags.","github":"https://github.com/AlexPresso/Spoilar-bd-plugin","github_raw":"https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/blob/main/release/Spoilar.plugin.js"},"changelog":[{"title":"v1.2 Improvements","items":["Add embed spoil option","Add message content spoil option","Add attachment spoil option"]}],"main":"index.js"};
 
     return !global.ZeresPluginLibrary ? class {
         constructor() {this._config = config;}
@@ -71,7 +71,7 @@ module.exports = (() => {
 
         onStart() {
             Patcher.before(DiscordModules.Dispatcher, 'dispatch', (o, args, _) => {this._dispatchMiddleware(args)});
-            Patcher.before(DiscordModules.MessageStore._dispatcher, 'dispatch', (o, args, _) => {this._dispatchMiddleware(args)});
+            Patcher.before(DiscordModules.MessageStore._dispatcher, 'dispatch', (o, args, _) => {this._messageStoreMiddleware(args)});
             Logger.log("Started.");
         }
 
@@ -118,10 +118,14 @@ module.exports = (() => {
                 case 'MESSAGE_UPDATE':
                     this._tryApplySpoiler(args[0].message);
                     break;
-                case 'LOAD_MESSAGES_SUCCESS':
-                    args[0].messages.forEach(m => this._tryApplySpoiler(m));
-                    break;
             }
+        }
+        _messageStoreMiddleware(args) {
+            const { type } = args[0];
+            if(type !== 'LOAD_MESSAGES_SUCCESS')
+                return;
+
+            args[0].messages.forEach(m => this._tryApplySpoiler(m));
         }
 
         _tryApplySpoiler(message) {
@@ -132,8 +136,8 @@ module.exports = (() => {
                 message.attachments.forEach(att => { att.filename = `SPOILER_${att.filename}` });
             if(this.settings.spoilEmbeds)
                 message.embeds = [];
-            if(this.settings.spoilMessageContent)
-                message.content = `|${message.content}|`;
+            if(this.settings.spoilMessageContent && message.content && !(message.content.startsWith("||") && message.content.endsWith("||")))
+                message.content = `||${message.content}||`;
         }
     }
 };
