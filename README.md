@@ -3,7 +3,7 @@
 A plugin used to put all medias sent by some Discord users under spoiler tags.
 
 ### Installation
-Download [Spoilar.plugin.js](https://github.com/AlexPresso/Spoilar-bd-plugin/releases/download/1.1/Spoilar.plugin.js)
+Download [Spoilar.plugin.js](https://github.com/AlexPresso/Spoilar-bd-plugin/releases)
 and drop it in your plugin folder.
 
 ### Usage
