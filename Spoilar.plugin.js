@@ -4,7 +4,7 @@
  * @description Spoils content from specific user IDs (attachments, embeds, text).
  * @version 2.0.0
  * @source https://github.com/AlexPresso/Spoilar-bd-plugin/tree/main
- * @updateUrl https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/refs/heads/main/release/Spoilar.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/refs/heads/main/Spoilar.plugin.js
  */
 
 module.exports = meta => {
