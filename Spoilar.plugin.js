@@ -2,9 +2,9 @@
  * @name Spoilar
  * @author alexpresso
  * @description Spoils content from specific user IDs (attachments, embeds, text).
- * @version 2.0.0
+ * @version 2.1.0
  * @source https://github.com/AlexPresso/Spoilar-bd-plugin/tree/main
- * @updateUrl https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/refs/heads/main/Spoilar.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/AlexPresso/Spoilar-bd-plugin/refs/heads/main/release/Spoilar.plugin.js
  */
 
 module.exports = meta => {
@@ -19,7 +19,8 @@ module.exports = meta => {
         "sUserIds": "",
         "bAttachments": true,
         "bEmbeds": true,
-        "bContent": true
+        "bContent": true,
+        "bIgnoreSelf": true
     };
 
     const loadConfig = () => {
@@ -37,12 +38,13 @@ module.exports = meta => {
     }
 
     const tryApplySpoiler = messages => {
-        for(const message of messages) {
-            if(!message || plugin.config.selfId === message.author.id || plugin.config.sUserIds.includes(message.author.id))
+        for(let message of messages) {
+            if(!message || (plugin.config.bIgnoreSelf && plugin.config.selfId === message.author.id) || plugin.config.sUserIds.includes(message.author.id))
                 continue;
 
             if(plugin.config.bAttachments && message.attachments.length)
-                message.attachments.forEach(att => { att.filename = `SPOILER_${att.filename}` });
+                for(let attachment of message.attachments)
+                    attachment.filename = `SPOILER_${attachment.filename}`;
             if(plugin.config.bEmbeds)
                 message.embeds = [];
             if(plugin.config.bContent && message.content && !(message.content.startsWith("||") && message.content.endsWith("||")))
@@ -54,9 +56,10 @@ module.exports = meta => {
         getSettingsPanel: () => plugin.UI.buildSettingsPanel({
             settings: [
                 {id: "sUserIds", type: "text", name: "User IDs", note: "Add all IDs of users you want to whitelist from forced spoiler tags (comma separated)", value: plugin.config.sUserIds},
-                {id: "bAttachments", type: "switch", name: "Spoil Attachments", value: plugin.config.bAttachments},
-                {id: "bEmbeds", type: "switch", name: "Spoil Embeds", value: plugin.config.bEmbeds},
-                {id: "bContent", type: "switch", name: "Spoil Message content", value: plugin.config.bContent},
+                {id: "bIgnoreSelf", type: "switch", name: "Ignore My Messages", note: "The plugin won't attempt to spoil your messages, but also won't touch them if you've manually enabled spoiler on the message itself", value: plugin.config.bIgnoreSelf},
+                {id: "bAttachments", type: "switch", name: "Spoil Attachments", note: "Put any attached media under spoiler", value: plugin.config.bAttachments},
+                {id: "bEmbeds", type: "switch", name: "Spoil Embeds", note: "Remove any embed from messages (including link previews)", value: plugin.config.bEmbeds},
+                {id: "bContent", type: "switch", name: "Spoil Message content", note: "Put whole message content under spoiler", value: plugin.config.bContent},
             ],
             onChange: (_, id, value) => {plugin.Data.save(id, value); plugin.config[id] = value;}
         }),
