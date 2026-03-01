@@ -11,7 +11,7 @@
 module.exports = meta => {
     const { Patcher, Logger, Webpack } = BdApi;
 
-    const Dispatcher = Webpack.getByKeys("dispatch", "subscribe");
+    const Dispatcher = Webpack.getByKeys("dispatch", "subscribe", {searchExports: true});
     const UserStore = Webpack.getStore("UserStore");
     const hookedEvents = new Set(["MESSAGE_CREATE", "MESSAGE_DELETE", "LOAD_MESSAGES_SUCCESS"]);
     const plugin = new BdApi(meta.name);
